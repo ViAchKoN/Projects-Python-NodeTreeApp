@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  web:
+    build: .
+    command: bash -c 'alembic upgrade head ; uvicorn main:app --host 0.0.0.0'
+    volumes:
+      - .:/app
+    ports:
+      - "8008:8000"
+    environment:
+      - DB_HOST=db
+    depends_on:
+      - db
+  db:
+    image: postgres:14.0
+    environment:
+      POSTGRES_DB: nta_db
+      POSTGRES_USER: nta
+      POSTGRES_PASSWORD: nta
+    ports:
+      - "5432:5432"
